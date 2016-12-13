@@ -1,0 +1,167 @@
+<template>
+<div id="app">
+  <!-- startheader -->
+  <nav class="nav_has-shadow" v-show="!statuslogin">
+  </nav>
+
+  <nav class="nav" v-show="!statuslogin">
+    <div class="nav-left">
+      <a class="brand" href="#">
+        <strong class="orange">KMUTNB</strong> <strong class="black">Event for admin</strong>
+      </a>
+    </div>
+    <br>
+    <div class="nav-center">
+      <br>
+      <input class="input" type="text" placeholder="Find a event">
+      <button class="button">
+          Search
+      </button>
+    </div>
+    <div class="nav-right">
+      <span class="nav-item">
+        <div @click="logout()" class="sizelogout">logout</div>
+        </span>
+    </div>
+  </nav>
+  <!-- endheader -->
+
+  <div v-show="statuslogin" class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Admin Login</p>
+      </header>
+      <section class="modal-card-body">
+        <label class="label">Adminname</label>
+        <p class="control">
+          <input class="input" type="text" v-model="adminname1">
+        </p>
+        <label class="label">password</label>
+        <p class="control">
+          <input class="input" type="text" v-model="password1">
+        </p>
+      </section>
+      <footer class="modal-card-foot">
+        <a class="button is-primary" @click="checkadmin(adminname1, password1)">Login</a>&nbsp;&nbsp;&nbsp;{{alertLogin}}
+      </footer>
+    </div>
+  </div>
+  <br>
+  <add-event v-show="!statuslogin" :add = "add"></add-event>
+</div>
+</template>
+
+<script>
+import firebase from 'firebase'
+var config = {
+  apiKey: 'AIzaSyBc4O3qrb1xoIZN4jTmWmGvAYWCxvE2x-A',
+  authDomain: 'kmutnbevent.firebaseapp.com',
+  databaseURL: 'https://kmutnbevent.firebaseio.com',
+  storageBucket: 'kmutnbevent.appspot.com',
+  messagingSenderId: '1024101975238'
+}
+firebase.initializeApp(config)
+import AddEvent from './components/AddEvent.vue'
+export default {
+  name: 'app',
+  components: {
+    AddEvent
+  },
+  data () {
+    return {
+      adminname: 'a',
+      password: 'k',
+      adminname1: '',
+      password1: '',
+      statuslogin: true,
+      alertLogin: '',
+      events: [],
+      count: 1
+    }
+  },
+  methods: {
+    checkadmin (adminname1, password1) {
+      this.adminname1 = adminname1
+      this.password1 = password1
+      if (this.adminname1 === this.adminname && this.password1 === this.password) {
+        this.statuslogin = false
+      } else if (this.adminname1 !== this.adminname && this.password1 === this.password) {
+        this.statuslogin = true
+        this.alertLogin = 'Check your username again'
+      } else if (this.adminname1 === this.adminname && this.password1 !== this.password) {
+        this.statuslogin = true
+        this.alertLogin = 'Check your password again'
+      } else if (this.adminname1 === '' && this.password1 === '') {
+        this.statuslogin = true
+        this.alertLogin = 'Check your username&password again'
+      }
+      this.events.push(this.eventNow)
+    },
+    logout () {
+      this.statuslogin = true
+      this.adminname1 = ''
+      this.password1 = ''
+      this.alertLogin = ''
+    },
+    add (name, location, date, contact, detail) {
+      var eventNow = {
+        id: this.count,
+        name: name,
+        location: location,
+        date: date,
+        contact: contact,
+        detail: detail
+      }
+      this.count = this.count + 1
+      this.events.push(eventNow)
+    }
+  }
+}
+</script>
+
+<style>
+#app {
+  /*background-image: url('./assets/backg.jpg');*/
+  /*background-size: cover;*/
+  height: 100vh;
+  /*background-color: #3d1a52;*/
+}
+.nav_has-shadow {
+  /*border-bottom: 6px solid #ec0186;*/
+  width: 100%;
+  background-color: #2c3e50;
+  ;
+  height: 7%;
+}
+.nav-center {
+  align-items: baseline;
+  padding-top: 10px;
+}
+.brand {
+  font-family: 'Yrsa', serif;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+.nav {
+  border-bottom: 2px solid #039be5;
+}
+.orange {
+  font-family: 'Yrsa', serif;
+  color: #ff9800;
+  font-size: 25px;
+}
+.black {
+  font-family: 'Yrsa', serif;
+  color: black;
+  font-size: 18px;
+}
+.modal-card-body {
+  text-align: left;
+}
+.sizelogout {
+  color: black;
+  font-family: 'Yrsa', serif;
+  font-size: 18px;
+}
+</style>
