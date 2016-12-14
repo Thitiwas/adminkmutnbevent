@@ -11,13 +11,6 @@
       </a>
     </div>
     <br>
-    <div class="nav-center">
-      <br>
-      <input class="input" type="text" placeholder="Find a event">
-      <button class="button">
-          Search
-      </button>
-    </div>
     <div class="nav-right">
       <span class="nav-item">
         <div @click="logout()" class="sizelogout">logout</div>
@@ -61,6 +54,7 @@ var config = {
   messagingSenderId: '1024101975238'
 }
 firebase.initializeApp(config)
+var Events = firebase.database().ref('events')
 import AddEvent from './components/AddEvent.vue'
 export default {
   name: 'app',
@@ -78,6 +72,14 @@ export default {
       events: [],
       count: 0
     }
+  },
+  mounted () {
+    var vm = this
+    Events.on('child_added', function (eventNow) {
+      var item = eventNow.val()
+      item.id = eventNow.key
+      vm.events.push(item)
+    })
   },
   methods: {
     checkadmin (adminname1, password1) {
@@ -113,7 +115,7 @@ export default {
         detail: detail
       }
       this.count = this.count + 1
-      this.events.push(eventNow)
+      Events.push(eventNow)
     }
   }
 }
