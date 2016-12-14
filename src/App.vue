@@ -102,13 +102,14 @@ export default {
       this.password1 = ''
       this.alertLogin = ''
     },
-    add (name, location, date, contact, detail) {
+    add (name, location, date, contact, picture, detail) {
       var eventNow = {
         id: this.count,
         name: name,
         location: location,
         date: date,
         contact: contact,
+        picture: picture,
         detail: detail
       }
       this.count = this.count + 1
@@ -128,7 +129,7 @@ export default {
 .nav_has-shadow {
   /*border-bottom: 6px solid #ec0186;*/
   width: 100%;
-  background-color: #2c3e50;
+  background-color: #212121;
   height: 7%;
 }
 .nav-center {

@@ -2,8 +2,8 @@
 <div id="addevent">
   <div class="left">
     <nav class="panel">
-      <p class="panel-heading">
-        <center class="headlist">All Event</center>
+      <p class="panel-head">
+        <center>All Event</center>
       </p>
       <a class="panel-block" v-for="n in events">
         <span class="panel-icon">
@@ -15,6 +15,7 @@
     </nav>
   </div>
 <div class="center">
+  <br>
   <label class="label">Event Name</label>
   <p class="control">
     <input class="input" type="text" placeholder="Event Name" v-model="name">
@@ -31,12 +32,16 @@
   <p class="control has-icon has-icon-right">
     <input class="input" type="text" placeholder="contact" v-model="contact">
   </p>
+  <label class="label">link Picture event</label>
+  <p class="control">
+    <input class="input" type="text" placeholder="link picture" v-model="picture">  </p>
   <label class="label">Details</label>
   <p class="control">
     <textarea class="textarea" placeholder="Details of Event" v-model="detail"></textarea>
   </p>
-  <a class="button is-success" @click="addTo(name, location, date, contact)">AddEvent</a>
+  <a class="button is-success" @click="addTo()">AddEvent</a>
   {{alertnull}}
+  <br><br>
 </div>
 <div class="right">
 </div>
@@ -63,19 +68,21 @@ export default {
       location: '',
       date: '',
       contact: '',
+      picture: '',
       detail: '',
       alertnull: ''
     }
   },
   methods: {
     addTo () {
-      if (this.name !== '' && this.location !== '' && this.date !== '' && this.contact !== '' && this.detail !== '') {
-        this.add(this.name, this.location, this.date, this.contact, this.detail)
+      if (this.name !== '' && this.location !== '' && this.date !== '' && this.contact !== '' && this.picture !== '' && this.detail !== '') {
+        this.add(this.name, this.location, this.date, this.contact, this.picture, this.detail)
         this.name = ''
         this.location = ''
         this.date = ''
         this.contact = ''
         this.detail = ''
+        this.picture = ''
         this.alertnull = ''
       } else {
         this.alertnull = 'Please Check again! Data in fill not null'
@@ -90,32 +97,37 @@ export default {
   /*background-image: url('./assets/backg.jpg');*/
   /*background-size: cover;*/
   height: 100vh;
-  background-color: #eeeeee;
+  background-color: #bdbdbd ;
 }
-
 .left {
   float: left;
   width: 30%;
   padding-top: 20px;
   padding-left: 20px;
 }
-
 .center {
   padding-left: 5%;
   float: left;
   width: 60%;
-    padding-top: 20px;
+  margin-top: 20px;
+  margin-left: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+  background-color: white;
 }
-
 .right {
   width: 15%;
   padding-top: 20px;
 }
-.panel-block {
+.panel {
+  background-color: white;
   font-size: 20px;
-  background-color: #d1c4e9 ;
 }
-.headlist {
-  background-color: #7c4dff;
+.panel-head {
+  font-family: 'Yrsa', serif;
+  background-color: #ff9800;
+  font-size: 22px;
+  color: black;
 }
+
 </style>
