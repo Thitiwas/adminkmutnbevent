@@ -47,8 +47,7 @@
       </footer>
     </div>
   </div>
-  <br>
-  <add-event v-show="!statuslogin" :add = "add"></add-event>
+  <add-event v-show="!statuslogin" :add = "add" :events = "events" :count = "count"></add-event>
 </div>
 </template>
 
@@ -77,7 +76,7 @@ export default {
       statuslogin: true,
       alertLogin: '',
       events: [],
-      count: 1
+      count: 0
     }
   },
   methods: {
@@ -96,7 +95,6 @@ export default {
         this.statuslogin = true
         this.alertLogin = 'Check your username&password again'
       }
-      this.events.push(this.eventNow)
     },
     logout () {
       this.statuslogin = true
@@ -131,7 +129,6 @@ export default {
   /*border-bottom: 6px solid #ec0186;*/
   width: 100%;
   background-color: #2c3e50;
-  ;
   height: 7%;
 }
 .nav-center {

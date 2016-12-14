@@ -3,12 +3,14 @@
   <div class="left">
     <nav class="panel">
       <p class="panel-heading">
-        <center>All Event</center>
+        <center class="headlist">All Event</center>
       </p>
       <a class="panel-block" v-for="n in events">
         <span class="panel-icon">
       <i class="fa fa-book"></i>
     </span> {{n.name}}
+    <button type="button">edit</button>
+    <button type="button">x</button>
       </a>
     </nav>
   </div>
@@ -34,6 +36,7 @@
     <textarea class="textarea" placeholder="Details of Event" v-model="detail"></textarea>
   </p>
   <a class="button is-success" @click="addTo(name, location, date, contact)">AddEvent</a>
+  {{alertnull}}
 </div>
 <div class="right">
 </div>
@@ -51,33 +54,39 @@
 // }
 // firebase.initializeApp(config)
 export default {
-  name: 'app',
+  name: 'addevent',
   components: {},
-  props: ['add', 'events'],
+  props: ['add', 'events', 'count'],
   data () {
     return {
       name: '',
       location: '',
       date: '',
       contact: '',
-      detail: ''
+      detail: '',
+      alertnull: ''
     }
   },
   methods: {
     addTo () {
-      this.add(this.name, this.location, this.date, this.contact, this.detail)
-      this.name = ''
-      this.location = ''
-      this.date = ''
-      this.contact = ''
-      this.detail = ''
+      if (this.name !== '' && this.location !== '' && this.date !== '' && this.contact !== '' && this.detail !== '') {
+        this.add(this.name, this.location, this.date, this.contact, this.detail)
+        this.name = ''
+        this.location = ''
+        this.date = ''
+        this.contact = ''
+        this.detail = ''
+        this.alertnull = ''
+      } else {
+        this.alertnull = 'Please Check again! Data in fill not null'
+      }
     }
   }
 }
 </script>
 
 <style>
-#app {
+#addevent {
   /*background-image: url('./assets/backg.jpg');*/
   /*background-size: cover;*/
   height: 100vh;
@@ -87,15 +96,26 @@ export default {
 .left {
   float: left;
   width: 30%;
+  padding-top: 20px;
+  padding-left: 20px;
 }
 
 .center {
   padding-left: 5%;
   float: left;
   width: 60%;
+    padding-top: 20px;
 }
 
 .right {
   width: 15%;
+  padding-top: 20px;
+}
+.panel-block {
+  font-size: 20px;
+  background-color: #d1c4e9 ;
+}
+.headlist {
+  background-color: #7c4dff;
 }
 </style>
