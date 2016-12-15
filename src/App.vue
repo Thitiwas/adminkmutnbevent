@@ -40,7 +40,7 @@
       </footer>
     </div>
   </div>
-  <add-event v-show="!statuslogin" :add = "add" :events = "events" :count = "count"></add-event>
+  <add-event v-show="!statuslogin" :add = "add" :events = "events" :id = "id" :removeEvent = "removeEvent"></add-event>
 </div>
 </template>
 
@@ -70,7 +70,8 @@ export default {
       statuslogin: true,
       alertLogin: '',
       events: [],
-      count: 0
+      count: 0,
+      id: ''
     }
   },
   mounted () {
@@ -79,6 +80,11 @@ export default {
       var item = eventNow.val()
       item.id = eventNow.key
       vm.events.push(item)
+    })
+    Events.on('child_removed', function (eventNow) {
+      var id = eventNow.key
+      var index = vm.events.findIndex(event => event.id === id)
+      vm.events.splice(index, 1)
     })
   },
   methods: {
@@ -112,10 +118,22 @@ export default {
         date: date,
         contact: contact,
         picture: picture,
-        detail: detail
+        detail: detail,
+        user: []
       }
       this.count = this.count + 1
       Events.push(eventNow)
+    },
+    removeEvent (id) {
+      firebase.database().ref(id).remove()
+      if (this.eventNow.id === id) {
+        this.eventNow.name = ''
+        this.eventNow.location = ''
+        this.eventNow.date = ''
+        this.eventNow.contact = ''
+        this.eventNow.detail = ''
+        this.eventNow.picture = ''
+      }
     }
   }
 }
