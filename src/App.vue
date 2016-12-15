@@ -40,7 +40,7 @@
       </footer>
     </div>
   </div>
-  <add-event v-show="!statuslogin" :add = "add" :events = "events" :id = "id" :removeEvent = "removeEvent"></add-event>
+  <add-event v-show="!statuslogin" :add = "add" :events = "events" :removeEvent = "removeEvent" :updateEvent = "updateEvent"></add-event>
 </div>
 </template>
 
@@ -71,7 +71,15 @@ export default {
       alertLogin: '',
       events: [],
       count: 0,
-      id: ''
+      changeEdit: {
+        name: '',
+        location: '',
+        date: '',
+        contact: '',
+        picture: '',
+        detail: '',
+        user: []
+      }
     }
   },
   mounted () {
@@ -85,6 +93,16 @@ export default {
       var id = eventNow.key
       var index = vm.events.findIndex(event => event.id === id)
       vm.events.splice(index, 1)
+    })
+    Events.on('child_changed', function (eventNow) {
+      var id = eventNow.key
+      var event = vm.events.find(events => events.id === id)
+      event.name = eventNow.val().name
+      event.location = eventNow.val().location
+      event.date = eventNow.val().date
+      event.contact = eventNow.val().contact
+      event.detail = eventNow.val().detail
+      event.picture = eventNow.val().picture
     })
   },
   methods: {
@@ -112,7 +130,6 @@ export default {
     },
     add (name, location, date, contact, picture, detail) {
       var eventNow = {
-        id: this.count,
         name: name,
         location: location,
         date: date,
@@ -125,7 +142,7 @@ export default {
       Events.push(eventNow)
     },
     removeEvent (id) {
-      firebase.database().ref(id).remove()
+      firebase.database().ref('events/' + id).remove()
       if (this.eventNow.id === id) {
         this.eventNow.name = ''
         this.eventNow.location = ''
@@ -134,6 +151,16 @@ export default {
         this.eventNow.detail = ''
         this.eventNow.picture = ''
       }
+    },
+    updateEvent (name, location, date, contact, picture, detail, id) {
+      firebase.database().ref('events/' + id).update({
+        name: name,
+        location: location,
+        date: date,
+        contact: contact,
+        picture: picture,
+        detail: detail
+      })
     }
   }
 }

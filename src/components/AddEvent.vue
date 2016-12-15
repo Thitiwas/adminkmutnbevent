@@ -13,8 +13,8 @@
       <i class="fa fa-book"></i>
     </span> {{n.name}}
         <br><br>
-        <a class="button is-warning" @click="gotoEdit()">Edit</a>
-        <a class="button is-danger" @click="removeEvent()">Delete</a>
+        <a class="button is-warning" @click="gotoEdit(n.id)">Edit</a>
+        <a class="button is-danger" @click="removeEvent(n.id)">Delete</a>
         <a class="button is-success" @click="showdetail1()">Detail</a>
         <div class="modal is-active" v-show="statusdetail">
           <div class="modal-background"></div>
@@ -72,7 +72,7 @@
 export default {
   name: 'addevent',
   components: {},
-  props: ['add', 'events', 'count', 'removeEvent', 'id'],
+  props: ['add', 'events', 'count', 'removeEvent', 'changeEdit', 'updateEvent'],
   data () {
     return {
       name: '',
@@ -83,7 +83,8 @@ export default {
       detail: '',
       alertnull: '',
       statusedit: false,
-      statusdetail: false
+      statusdetail: false,
+      id: ''
     }
   },
   methods: {
@@ -101,8 +102,28 @@ export default {
         this.alertnull = 'Please Check again! Data in fill not null'
       }
     },
-    gotoEdit () {
+    gotoEdit (id) {
       this.statusedit = true
+      var event = this.events.find(e => e.id === id)
+      this.id = event.id
+      this.name = event.name
+      this.location = event.location
+      this.date = event.date
+      this.contact = event.contact
+      this.detail = event.detail
+      this.picture = event.picture
+    },
+    edit () {
+      if (this.name !== '' && this.location !== '' && this.date !== '' && this.contact !== '' && this.picture !== '' && this.detail !== '') {
+        this.updateEvent(this.name, this.location, this.date, this.contact, this.picture, this.detail, this.id)
+        this.name = ''
+        this.location = ''
+        this.date = ''
+        this.contact = ''
+        this.detail = ''
+        this.picture = ''
+        this.alertnull = ''
+      }
     },
     cancleEdit () {
       this.statusedit = false
