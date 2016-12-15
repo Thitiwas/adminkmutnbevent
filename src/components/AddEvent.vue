@@ -45,6 +45,10 @@
     <p class="control has-icon has-icon-right">
       <input class="input" type="text" placeholder="location" v-model="location">
     </p>
+    <label class="label">link map</label>
+    <p class="control has-icon has-icon-right">
+      <input class="input" type="text" placeholder="location" v-model="map">
+    </p>
     <label class="label">Date & Time</label>
     <p class="control has-icon has-icon-right">
       <input class="input" type="text" placeholder="Date & Time" v-model="date">
@@ -77,6 +81,7 @@ export default {
     return {
       name: '',
       location: '',
+      map: '',
       date: '',
       contact: '',
       picture: '',
@@ -89,10 +94,11 @@ export default {
   },
   methods: {
     addTo () {
-      if (this.name !== '' && this.location !== '' && this.date !== '' && this.contact !== '' && this.picture !== '' && this.detail !== '') {
-        this.add(this.name, this.location, this.date, this.contact, this.picture, this.detail)
+      if (this.name !== '' && this.location !== '' && this.map !== '' && this.date !== '' && this.contact !== '' && this.picture !== '' && this.detail !== '') {
+        this.add(this.name, this.location, this.map, this.date, this.contact, this.picture, this.detail)
         this.name = ''
         this.location = ''
+        this.map = ''
         this.date = ''
         this.contact = ''
         this.detail = ''
@@ -108,16 +114,18 @@ export default {
       this.id = event.id
       this.name = event.name
       this.location = event.location
+      this.map = event.map
       this.date = event.date
       this.contact = event.contact
       this.detail = event.detail
       this.picture = event.picture
     },
     edit () {
-      if (this.name !== '' && this.location !== '' && this.date !== '' && this.contact !== '' && this.picture !== '' && this.detail !== '') {
-        this.updateEvent(this.name, this.location, this.date, this.contact, this.picture, this.detail, this.id)
+      if (this.name !== '' && this.location !== '' && this.map !== '' && this.date !== '' && this.contact !== '' && this.picture !== '' && this.detail !== '') {
+        this.updateEvent(this.name, this.location, this.map, this.date, this.contact, this.picture, this.detail, this.id)
         this.name = ''
         this.location = ''
+        this.map = ''
         this.date = ''
         this.contact = ''
         this.detail = ''
@@ -127,6 +135,14 @@ export default {
     },
     cancleEdit () {
       this.statusedit = false
+      this.name = ''
+      this.location = ''
+      this.map = ''
+      this.date = ''
+      this.contact = ''
+      this.detail = ''
+      this.picture = ''
+      this.alertnull = ''
     },
     showdetail1 () {
       this.statusdetail = true

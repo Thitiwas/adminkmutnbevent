@@ -74,6 +74,7 @@ export default {
       changeEdit: {
         name: '',
         location: '',
+        map: '',
         date: '',
         contact: '',
         picture: '',
@@ -99,6 +100,7 @@ export default {
       var event = vm.events.find(events => events.id === id)
       event.name = eventNow.val().name
       event.location = eventNow.val().location
+      event.map = eventNow.val().map
       event.date = eventNow.val().date
       event.contact = eventNow.val().contact
       event.detail = eventNow.val().detail
@@ -128,15 +130,16 @@ export default {
       this.password1 = ''
       this.alertLogin = ''
     },
-    add (name, location, date, contact, picture, detail) {
+    add (name, location, map, date, contact, picture, detail) {
       var eventNow = {
         name: name,
         location: location,
+        map: map,
         date: date,
         contact: contact,
         picture: picture,
         detail: detail,
-        user: []
+        user: ''
       }
       this.count = this.count + 1
       Events.push(eventNow)
@@ -146,16 +149,18 @@ export default {
       if (this.eventNow.id === id) {
         this.eventNow.name = ''
         this.eventNow.location = ''
+        this.eventNow.map = ''
         this.eventNow.date = ''
         this.eventNow.contact = ''
         this.eventNow.detail = ''
         this.eventNow.picture = ''
       }
     },
-    updateEvent (name, location, date, contact, picture, detail, id) {
+    updateEvent (name, location, map, date, contact, picture, detail, id) {
       firebase.database().ref('events/' + id).update({
         name: name,
         location: location,
+        map: map,
         date: date,
         contact: contact,
         picture: picture,
@@ -184,7 +189,7 @@ export default {
   padding-top: 10px;
 }
 .brand {
-  font-family: 'Yrsa', serif;
+  font-family: 'Vollkorn', serif;
   padding-top: 10px;
   padding-left: 10px;
 }
@@ -192,12 +197,12 @@ export default {
   border-bottom: 2px solid #039be5;
 }
 .orange {
-  font-family: 'Yrsa', serif;
+  font-family: 'Vollkorn', serif;
   color: #ff9800;
   font-size: 25px;
 }
 .black {
-  font-family: 'Yrsa', serif;
+  font-family: 'Vollkorn', serif;
   color: black;
   font-size: 18px;
 }
@@ -206,7 +211,7 @@ export default {
 }
 .sizelogout {
   color: black;
-  font-family: 'Yrsa', serif;
+  font-family: 'Vollkorn', serif;
   font-size: 18px;
 }
 </style>
