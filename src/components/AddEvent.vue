@@ -5,10 +5,21 @@
       <p class="panel-head">
         <center>All Event</center>
       </p>
-      <!-- <center><input class="search" type="text" placeholder="Find a event">
-        <a class="button is-info">Search</a></center>
-      <hr> -->
-      <a class="panel-block" v-for="n in events">
+
+      <center><input class="search" type="text" placeholder="Find a event" v-model="search">
+        <!-- <a class="button is-info">Search</a></center> -->
+        <div v-show="!checksearch" v-for="show in filteredItems">
+          <span class="panel-icon">
+        <i class="fa fa-book"></i>
+      </span> {{show.name}}
+          <br>
+          <a class="button is-warning" @click="gotoEdit(show.id)">Edit</a>
+          <a class="button is-danger" @click="removeEvent(show.id)">Delete</a>
+          <a class="button is-success" @click="showdetail1(show.id)">Detail</a>
+          <a class="button">Like {{countLike(show.id)}}</a>
+        </div>
+      <hr>
+      <a class="panel-block" v-show="checksearch" v-for="n in events">
         <span class="panel-icon">
       <i class="fa fa-book"></i>
     </span> {{n.name}}
@@ -16,6 +27,7 @@
         <a class="button is-warning" @click="gotoEdit(n.id)">Edit</a>
         <a class="button is-danger" @click="removeEvent(n.id)">Delete</a>
         <a class="button is-success" @click="showdetail1(n.id)">Detail</a>
+        <a class="button">Like {{countLike(n.id)}}</a>
         <div class="modal is-active" v-show="statusdetail">
           <div class="modal-background"></div>
           <div class="modal-card">
@@ -24,10 +36,19 @@
               <button class="delete" @click="showdetail2()"></button>
             </header>
             <section class="modal-card-body">
-              {{event2.location}}<br><br>
-              {{event2.date}}<br><br><br>
-              {{event2.contact}}<br><br><br>
-              {{event2.detail}}<br><br><br>
+              <img :src="event2.picture">
+              <br><br>
+              <h1>location <br><br> {{event2.location}}</h1>
+              <hr>
+              <h1>map <br><br> <a target="_blank" :href="event2.map">{{event2.map}}</a>
+              <hr>
+              <h1>date     <br><br> {{event2.date}}</h1>
+              <hr>
+              <h1>contact  <br><br> {{event2.contact}}</h1>
+              <hr>
+              <h1>detial   <br><br> {{event2.detail}}</h1>
+              <hr>
+              <h1>         <br><br> {{countLike(n.id)}} Like</h1>
             </section>
           </div>
         </div>
@@ -63,11 +84,14 @@
     <p class="control">
       <textarea class="textarea" placeholder="Details of Event" v-model="detail"></textarea>
     </p>
-    <a class="button is-success" v-show="!statusedit" @click="addTo()">AddEvent</a> {{alertnull}}
-    <a class="button is-success" v-show="statusedit" @click="edit()">Editor</a> {{alertnull}}
-    <a class="button is-success" v-show="statusedit" @click="cancleEdit()">cancle</a>
+    <a class="button is-success" v-show="!statusedit" @click="addTo()">AddEvent</a>
+    <a class="button is-success" v-show="statusedit" @click="edit()">Editor</a>
+    <a class="button is-success"  @click="cancleEdit()">cancle</a>{{alertnull}}
     <br><br>
   </div>
+  <!--BACK TO TOP STARTS-->
+<a rel="nofollow" style="display:scroll;position:fixed;bottom:10px;right:5px;" href="#" title="Back to Top"><img src="http://2.bp.blogspot.com/-BkNGUImcIV4/USDcBMHYjqI/AAAAAAAAAig/qEtwRO4pH6Q/s1600/back+to+top.png "/></a><!--mybloggersworld.com-->
+<!--BACK TO ENDS-->
 </div>
 </template>
 
@@ -75,7 +99,7 @@
 export default {
   name: 'addevent',
   components: {},
-  props: ['add', 'events', 'count', 'removeEvent', 'changeEdit', 'updateEvent'],
+  props: ['add', 'events', 'count', 'removeEvent', 'changeEdit', 'updateEvent', 'users', 'password'],
   data () {
     return {
       name: '',
@@ -89,7 +113,24 @@ export default {
       statusedit: false,
       statusdetail: false,
       id: '',
-      event2: ''
+      event2: '',
+      search: '',
+      statussearch: true
+    }
+  },
+  computed: {
+    filteredItems: function () {
+      var data = this.events
+      // console.log('search :::', this.search)
+      console.log(data.filter(item => item.name === this.search))
+      return data.filter(item => item.name === this.search)
+    },
+    checksearch: function () {
+      if (this.search !== '') {
+        return false
+      } else if (this.search === '') {
+        return true
+      }
     }
   },
   methods: {
@@ -105,7 +146,7 @@ export default {
         this.picture = ''
         this.alertnull = ''
       } else {
-        this.alertnull = 'Please Check again! Data in fill not null'
+        this.alertnull = '  Please Check again! Data in fill not null'
       }
     },
     gotoEdit (id) {
@@ -131,6 +172,8 @@ export default {
         this.detail = ''
         this.picture = ''
         this.alertnull = ''
+      } else {
+        this.alertnull = '  Please Check again! Data in fill not null'
       }
     },
     cancleEdit () {
@@ -152,6 +195,15 @@ export default {
     },
     showdetail2 () {
       this.statusdetail = false
+    },
+    countLike (id) {
+      var count = 0
+      this.users.forEach(user => {
+        if (user.eventId === id) {
+          count++
+        }
+      })
+      return count
     }
   }
 }

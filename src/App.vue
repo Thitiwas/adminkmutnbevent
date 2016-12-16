@@ -32,7 +32,7 @@
         </p>
         <label class="label">password</label>
         <p class="control">
-          <input class="input" type="text" v-model="password1">
+          <input class="input" type="password" v-model="password1">
         </p>
       </section>
       <footer class="modal-card-foot">
@@ -40,7 +40,7 @@
       </footer>
     </div>
   </div>
-  <add-event v-show="!statuslogin" :add = "add" :events = "events" :removeEvent = "removeEvent" :updateEvent = "updateEvent"></add-event>
+  <add-event v-show="!statuslogin" :add = "add" :events = "events" :removeEvent = "removeEvent" :updateEvent = "updateEvent" :users = "users" :password = "password"></add-event>
 </div>
 </template>
 
@@ -54,6 +54,7 @@ var config = {
   messagingSenderId: '1024101975238'
 }
 firebase.initializeApp(config)
+var Users = firebase.database().ref('users')
 var Events = firebase.database().ref('events')
 import AddEvent from './components/AddEvent.vue'
 export default {
@@ -63,8 +64,9 @@ export default {
   },
   data () {
     return {
-      adminname: 'a',
-      password: 'k',
+      users: [],
+      adminname: 'admin',
+      password: 'admin',
       adminname1: '',
       password1: '',
       statuslogin: true,
@@ -78,8 +80,7 @@ export default {
         date: '',
         contact: '',
         picture: '',
-        detail: '',
-        user: []
+        detail: ''
       }
     }
   },
@@ -105,6 +106,16 @@ export default {
       event.contact = eventNow.val().contact
       event.detail = eventNow.val().detail
       event.picture = eventNow.val().picture
+    })
+    Users.on('child_added', function (eventNow) {
+      var item = eventNow.val()
+      item.id = eventNow.key
+      vm.users.push(item)
+    })
+    Users.on('child_removed', function (eventNow) {
+      var id = eventNow.key
+      var index = vm.users.findIndex(user => user.id === id)
+      vm.users.splice(index, 1)
     })
   },
   methods: {
@@ -138,13 +149,14 @@ export default {
         date: date,
         contact: contact,
         picture: picture,
-        detail: detail,
-        user: ''
+        detail: detail
       }
       this.count = this.count + 1
       Events.push(eventNow)
+      console.log(this.events.detail)
     },
     removeEvent (id) {
+      this.showConfirm = true
       firebase.database().ref('events/' + id).remove()
       if (this.eventNow.id === id) {
         this.eventNow.name = ''
