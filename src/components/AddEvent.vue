@@ -5,9 +5,9 @@
       <p class="panel-head">
         <center>All Event</center>
       </p>
-      <center><input class="search" type="text" placeholder="Find a event">
+      <!-- <center><input class="search" type="text" placeholder="Find a event">
         <a class="button is-info">Search</a></center>
-      <hr>
+      <hr> -->
       <a class="panel-block" v-for="n in events">
         <span class="panel-icon">
       <i class="fa fa-book"></i>
@@ -15,20 +15,19 @@
         <br><br>
         <a class="button is-warning" @click="gotoEdit(n.id)">Edit</a>
         <a class="button is-danger" @click="removeEvent(n.id)">Delete</a>
-        <a class="button is-success" @click="showdetail1()">Detail</a>
+        <a class="button is-success" @click="showdetail1(n.id)">Detail</a>
         <div class="modal is-active" v-show="statusdetail">
           <div class="modal-background"></div>
           <div class="modal-card">
             <header class="modal-card-head">
-              <p class="modal-card-title">details Event</p>
+              <p class="modal-card-title">{{event2.name}}</p>
               <button class="delete" @click="showdetail2()"></button>
             </header>
             <section class="modal-card-body">
-              {{n.name}}<br><br><br>
-              {{n.location}}<br><br>
-              {{n.date}}<br><br><br>
-              {{n.contact}}<br><br><br>
-              {{n.detail}}<br><br><br>
+              {{event2.location}}<br><br>
+              {{event2.date}}<br><br><br>
+              {{event2.contact}}<br><br><br>
+              {{event2.detail}}<br><br><br>
             </section>
           </div>
         </div>
@@ -89,7 +88,8 @@ export default {
       alertnull: '',
       statusedit: false,
       statusdetail: false,
-      id: ''
+      id: '',
+      event2: ''
     }
   },
   methods: {
@@ -144,7 +144,10 @@ export default {
       this.picture = ''
       this.alertnull = ''
     },
-    showdetail1 () {
+    showdetail1 (id) {
+      this.statusdetail = true
+      var event2 = this.events.find(event2 => event2.id === id)
+      this.event2 = event2
       this.statusdetail = true
     },
     showdetail2 () {
