@@ -3,7 +3,7 @@
   <div class="left">
     <nav class="panel">
       <p class="panel-head">
-        <center>YOYO</center>
+        <center>All Event </center>
       </p>
 
       <center><input class="search" type="text" placeholder="Find a event" v-model="search">
